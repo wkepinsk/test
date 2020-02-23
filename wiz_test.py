@@ -11,8 +11,8 @@ gender = 'male'
 country_code = '+48'
 phone_number = '123123123'
 email = 'nowak.gmail.com'
-password = 'brakhasla'
-
+password = 'brak1hasla'
+valid_country = 'Polska'
 
 class WizzairRegistration(unittest.TestCase):
     def setUp(self):
@@ -69,6 +69,30 @@ class WizzairRegistration(unittest.TestCase):
         # podaj passswd
         pw = driver.find_element_by_xpath('//input[@data-test="booking-register-password"]')
         pw.send_keys(password)
+
+        # 9. Wybierz narodowość
+        country_field = driver.find_element_by_xpath('//input[@data-test="booking-register-country"]')
+        country_field.click()
+        # Wyszukaj kraje
+        country_to_choose = driver.find_element_by_xpath("//div[@class='register-form__country-container__locations']")
+        # Poszukaj elementow "label" wewnatrz listy "countries"
+        countries = country_to_choose.find_elements_by_tag_name("label")
+        # Iteruj po kazdym elemencie w liscie "countries"
+        for label in countries:
+            # Wewnatrz "label" znajdz element "strong"
+            option=label.find_element_by_tag_name('strong')
+            # Jesli tekst elementu jest taki jak zadany w valid_country
+            if option.get_attribute("innerText") == valid_country:
+                # Przewin do tego elementu
+                option.location_once_scrolled_into_view
+                # Kliknij
+                option.click()
+                # Wyjdz z petli - juz znalazlem i kliknalem
+                break
+
+
+    
+
 
 
         time.sleep(10)
